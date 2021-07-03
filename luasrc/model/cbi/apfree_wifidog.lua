@@ -1,15 +1,18 @@
 -- Copyright (C) 2016 zhangzf@kunteng.org
+-- update 2021 leo@leoslion.cn
 -- Licensed to the public under the GNU General Public License v3.
+
 
 local sys = require "luci.sys"
 local opkg = require "luci.model.ipkg"
 
 local packageName = "wifidog"
+local prgName = "wifidogx"
 local m, s, o
 
 local function get_status()
-	if luci.sys.call("pidof %s >/dev/null" %{packageName}) == 0 then
-		local UpTime = luci.util.exec("wdctl status | grep Uptime | cut -d ' ' -f 2-6")
+	if luci.sys.call("pidof %s >/dev/null" %{prgName}) == 0 then
+		local UpTime = luci.util.exec("wdctlx status | grep Uptime | cut -d ' ' -f 2-6")
 		local StatusUrl = "http://" .. luci.http.getenv('SERVER_NAME') .. ":2060/wifidog/status"	
 		
 		return translate("<span id=\"wifidog-status\" style=\"color:green;margin-left:50px\">已运行 " .. UpTime .."</span>") -- .."<a target=\"_blank\" href=" .. StatusUrl .. "> 查看更多</a>")
@@ -31,7 +34,7 @@ local descr = [[
 </p>
 ]]
 
-m = Map("wifidog", translate("<img src=\"/luci-static/resources/icons/apfreeWifiDog.png\" alt=\"\" />ApFree WifiDog"), translate(descr))
+m = Map("wifidogx", translate("<img src=\"/luci-static/resources/icons/apfreeWifiDog.png\" alt=\"\" />ApFree WiFiDog"), translate(descr))
 
 s = m:section(TypedSection, "wifidog", translate("运行状态"), get_status())
 s.anonymous = true
@@ -45,7 +48,7 @@ s:tab("policy", translate("访问控制"))
 s:tab("advanced", translate("高级设置"))
 
 -- 基本设置
-Enable = s:taboption("general", Flag, "enable", translate("启用"),translate("打开或关闭认证"))
+Enable = s:taboption("general", Flag, "disabled", translate("关闭"),translate("打开或关闭认证"))
 Enable.rmempty = false
 Enable.default = "1"
 

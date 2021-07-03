@@ -13,9 +13,9 @@ function getClientList()
 	local RespCode = 0
 	local HostName, IPAddr, MacAddr, Download, Upload, LoginTime
 	
-	local WdctlCMD = "wdctl status | grep -e '^ ' | sed -r 's/^ +//' 2>/dev/null"
+	local WdctlCMD = "wdctlx status | grep -e '^ ' | sed -r 's/^ +//' 2>/dev/null"
 	
-	local UpTime = luci.util.exec("wdctl status | grep Uptime | cut -d ' ' -f 2-6")
+	local UpTime = luci.util.exec("wdctlx status | grep Uptime | cut -d ' ' -f 2-6")
 	if UpTime == "" then
 		RespCode = 1
 	else		
